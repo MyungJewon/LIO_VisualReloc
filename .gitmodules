@@ -1,0 +1,6 @@
+[submodule "Cpp_SLAM"]
+	path = Cpp_SLAM
+	url = https://MyungJewon@github.com/MyungJewon/Cpp_SLAM.git
+[submodule "VSLAM_repository"]
+	path = VSLAM_repository
+	url = https://MyungJewon@github.com/MyungJewon/VSLAM_repository.git
