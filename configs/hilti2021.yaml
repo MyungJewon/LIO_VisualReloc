@@ -1,0 +1,31 @@
+# Hilti 2021 exp02_construction_multilevel — 자체 LiDAR SLAM 포즈 기반 DB (M5)
+# 경로는 로컬 절대경로 (실행은 원본 작업 레포의 venv/빌드 사용 — scripts/ 참고)
+bag_path: "/Users/deepfine/Downloads/exp02_construction_multilevel.bag"   # ROS1
+image_topic: "/alphasense/cam0/image_raw"
+# GT 대신 Cpp_SLAM이 뽑은 궤적 (라이다 좌표계 → T_cam0_traj로 환원)
+gt_path: "/Users/deepfine/C++Project/Cpp_SLAM/output/slam_trajectory.tum"
+
+calib:
+  kalibr_yaml: "/Users/deepfine/C++Project/LIO_VisualReloc/configs/hilti2021_calib/calib_3_cam0-1-camchain-imucam.yaml"
+  cam: "cam0"
+  # Alphasense 0.4MP, 시야 ~126° (전 데이터셋 200°보다 온순) → 넓게 편다
+  rect_size: [640, 640]
+  fov_scale: 0.75
+  view_yaws: [-50, 0, 50]
+  # 궤적(라이다 PandarXT-32) → cam0 외부파라미터.
+  # lidar_calibration.yaml 쿼터니언의 xyzw 해석 (유력) — 투영 검증 후 확정.
+  T_cam0_traj: [-0.9999, -0.0067,  0.0101, -0.0550,
+                -0.0101, -0.0024, -0.9999,  0.0675,
+                 0.0067, -1.0000,  0.0024, -0.0521,
+                 0.0,     0.0,     0.0,     1.0]
+
+retrieval_model: "megaloc"
+top_k: 5
+min_inliers: 15
+keyframe_stride: 10
+triangulation:
+  pair_offsets: [-2, -1, 1, 2]
+  min_baseline: 0.05
+  max_reproj_px: 1.0
+  max_depth_ratio: 50.0
+db_dir: "/Users/deepfine/C++Project/LIO_VisualReloc/output/db_hilti2021"
